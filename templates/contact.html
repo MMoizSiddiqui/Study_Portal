@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <h1>FAST Parhai</h1>
+                </a>
+            </div>
+            <nav>
+                <ul class="main-nav">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About Us</a></li>
+                    <li class="active"><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+                <ul class="auth-nav">
+                    <li><a href="{{ url_for('login') }}" class="btn btn-outline">Login</a></li>
+                    <li><a href="{{ url_for('register') }}" class="btn btn-primary">Register</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="contact-hero" style="background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%); min-height: 260px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; left: 2rem; top: 2rem; font-size: 2.5rem; opacity: 0.12;">📬</div>
+            <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                <div class="hero-content" style="background: rgba(255,255,255,0.85); border-radius: 2rem; box-shadow: 0 8px 32px 0 rgba(33,147,176,0.10); padding: 2rem 2rem; max-width: 700px; width: 100%; text-align: center; position: relative; animation: fadeInUp 1.2s;">
+                    <h1 style="font-size: 2.2rem; font-weight: 700; color: #2193b0; display: flex; align-items: center; justify-content: center; gap: 0.7rem; animation: bounceIn 1.2s;">
+                        <span style="font-size: 1.7rem;">💬</span> Get in Touch
+                    </h1>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 1rem;">Have questions or feedback? We're here to help!</p>
+                </div>
+            </div>
+            <style>
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(40px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes bounceIn {
+                0% { transform: scale(0.8); }
+                60% { transform: scale(1.05); }
+                80% { transform: scale(0.97); }
+                100% { transform: scale(1); }
+            }
+            @media (max-width: 700px) {
+                .hero-content { padding: 1.2rem 0.5rem !important; }
+                .hero-content h1 { font-size: 1.5rem !important; }
+            }
+            </style>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="margin: 20px auto; max-width: 800px; padding: 15px; border-radius: 5px; text-align: center; {% if category == 'success' %}background-color: #d4edda; color: #155724;{% else %}background-color: #f8d7da; color: #721c24;{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="contact-info">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Visit Us</h3>
+                        <p>FAST-NUCES, National Highway, Karachi, Pakistan</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Us</h3>
+                        <p>support@fastparhai.edu.pk</p>
+                        <p>info@fastparhai.edu.pk</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Call Us</h3>
+                        <p>+92 42 111 128 128</p>
+                        <p>Mon-Fri, 9:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-form-section">
+            <div class="container">
+                <div class="form-container">
+                    <h2>Send Us a Message</h2>
+                    <form id="contactForm" class="contact-form" method="POST" action="{{ url_for('contact') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="Message subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Your message" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-submit">Send Message</button>
+                        </div>
+                    </form>
+                    <div id="formSuccess" class="form-success">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Message Sent!</h3>
+                        <p>Thank you for contacting us. We'll get back to you shortly.</p>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <h2>Find Us</h2>
+                    <div class="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.203478526132!2d67.2621088751519!3d24.856899077931566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb3316c5276e35b%3A0x823a6a0100195ffd!2sFAST%20National%20University%20Karachi%20Campus!5e0!3m2!1sen!2s!4v1746268566887!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How do I create an account?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To create an account, click on the "Login" button in the top navigation bar, then select "Register" on the login page. Fill out the registration form with your details and submit.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How can I upload my notes?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>After logging in, navigate to your dashboard and click on the "Upload Notes" button. Fill out the form with details about your notes and upload the file.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Are all the notes free to download?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, all notes on FAST Parhai are free to download. We believe in making education accessible to everyone.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How can I report inappropriate content?</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If you find any inappropriate content, click on the "Report" button available on every note or forum post. Fill out the report form with details about the issue.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 2rem 2rem 0 0; box-shadow: 0 -4px 24px 0 rgba(33,147,176,0.10); margin-top: -2rem;">
+    <div class="container">
+        <div class="footer-content" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; padding: 2.5rem 0 1.5rem 0;">
+            <div class="footer-logo">
+                <h2 style="color: #2193b0; font-weight: 700;">FAST Parhai</h2>
+                <p style="color: #333;">Academic Resource Sharing Platform</p>
+            </div>
+            <div class="footer-links">
+                <h3 style="color: #2193b0;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="/" style="color: #2193b0;">Home</a></li>
+                    <li><a href="/about" style="color: #2193b0;">About</a></li>
+                    <li><a href="/contact" style="color: #2193b0;">Contact</a></li>
+                    <li><a href="/login" style="color: #2193b0;">Login</a></li>
+                    <li><a href="/register" style="color: #2193b0;">Register</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3 style="color: #2193b0;">Contact Us</h3>
+                <p style="color: #333;"><i class="fas fa-envelope"></i> support@fastparhai.edu</p>
+                <p style="color: #333;"><i class="fas fa-map-marker-alt"></i> FAST University Campus</p>
+                <div class="social-icons" style="margin-top: 1rem;">
+                    <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom" style="text-align: center; color: #2193b0; padding: 1rem 0 0.5rem 0; font-size: 1rem;">
+            <p>&copy; 2023 FAST Parhai. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<script>
+// Animate social icons on hover
+    document.querySelectorAll('.social-icons a').forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            icon.style.color = '#6dd5ed';
+            icon.style.transform = 'scale(1.2) rotate(-8deg)';
+        });
+        icon.addEventListener('mouseleave', () => {
+            icon.style.color = '#2193b0';
+            icon.style.transform = 'none';
+        });
+    });
+</script>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-toggle">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-box">
+            <div class="chat-header">
+                <h3>Live Support</h3>
+                <button class="close-chat"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages">
+                <div class="message support">
+                    <div class="message-content">
+                        <p>Hello! How can we help you today?</p>
+                        <span class="time">Just now</span>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message...">
+                <button><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contact.js') }}"></script>
+</body>
+</html> 

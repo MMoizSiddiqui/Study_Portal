@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity logs - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header"><h2>Admin</h2></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('manage_resources') }}"><i class="fas fa-book"></i><span>Resources</span></a></li>
+                    <li><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i><span>Users</span></a></li>
+                    <li><a href="{{ url_for('admin_comments') }}"><i class="fas fa-comments"></i><span>Comments</span></a></li>
+                    <li><a href="{{ url_for('admin_analytics') }}"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+                    <li class="active"><a href="{{ url_for('admin_logs') }}"><i class="fas fa-list"></i><span>Logs</span></a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="content-header"><h1>System activity log</h1></header>
+            <div class="admin-table-container" style="margin:1rem;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Time</th><th>Actor</th><th>Action</th><th>Details</th><th>IP</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.id }}</td>
+                            <td>{% if log.created_at %}{{ log.created_at.strftime('%Y-%m-%d %H:%M') }}{% else %}—{% endif %}</td>
+                            <td>{{ log.actor_id or '—' }}</td>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.details or '' }}</td>
+                            <td>{{ log.ip_address or '—' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6">No log entries yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

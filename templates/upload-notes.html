@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Notes - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button id="sidebarToggle" class="sidebar-toggle" title="Toggle Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="sidebar-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{{ url_for('upload_notes') }}">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('browse_notes') }}">
+                            <i class="fas fa-book"></i>
+                            <span>Browse Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('forum') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>Forum</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-divider"></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Content Header -->
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="headerToggle" class="header-toggle" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Upload Notes</h1>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Upload Notes Content -->
+            <div class="dashboard-content">
+                <div class="upload-container">
+                    <div class="upload-card">
+                        <div class="upload-intro">
+                            <h2>Share Your Knowledge</h2>
+                            <p>Upload your notes, assignments, or study materials to help fellow students. Your contribution makes a difference!</p>
+                        </div>
+
+                        <form id="upload-form" class="upload-form" method="POST" enctype="multipart/form-data" action="{{ url_for('upload_notes') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <div class="form-grid">
+                                <div class="form-main">
+                                    <div class="form-section">
+                                        <h3>File Upload</h3>
+                                        <div id="file-upload-area" class="file-upload-area">
+                                            <input type="file" id="file-upload" name="file" class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx">
+                                            <div class="file-upload-content">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <p>Drag & drop your file here or <span class="browse-link">browse</span></p>
+                                                <p class="file-types">Supported formats: PDF, DOCX, PPT (Max: 50MB)</p>
+                                            </div>
+                                        </div>
+                                        <div id="file-preview" class="file-preview" style="display: none;">
+                                            <div class="file-info">
+                                                <i class="file-icon fas fa-file-pdf"></i>
+                                                <div class="file-details">
+                                                    <p id="preview-file-name" class="file-name">document.pdf</p>
+                                                    <p id="preview-file-size" class="file-size">2.5 MB</p>
+                                                </div>
+                                            </div>
+                                            <button type="button" id="remove-file" class="remove-file">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div id="file-upload-error" class="error-message"></div>
+                                    </div>
+
+                                    <div class="form-section">
+                                        <h3>Note Details</h3>
+                                        <div class="form-group">
+                                            <label for="title">Title <span class="required">*</span></label>
+                                            <input type="text" id="title" name="title" placeholder="e.g., Data Structures Complete Notes" required>
+                                            <div id="title-error" class="error-message"></div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="course">Course <span class="required">*</span></label>
+                                                <select id="course" name="course" required>
+                                                    <option value="">Select Course</option>
+                                                    <option value="CS101">CS101 - Programming Fundamentals</option>
+                                                    <option value="CS201">CS201 - Data Structures</option>
+                                                    <option value="CS301">CS301 - Database Systems</option>
+                                                    <option value="CS302">CS302 - Analysis of Algorithms</option>
+                                                    <option value="CS304">CS304 - Object Oriented Programming</option>
+                                                    <option value="CS307">CS307 - Artificial Intelligence</option>
+                                                    <option value="CS308">CS308 - Web Engineering</option>
+                                                    <option value="CS403">CS403 - Computer Networks</option>
+                                                    <option value="CS409">CS409 - Machine Learning</option>
+                                                    <option value="EE101">EE101 - Basic Electronics</option>
+                                                    <option value="EE201">EE201 - Digital Logic Design</option>
+                                                    <option value="MTH101">MTH101 - Calculus I</option>
+                                                    <option value="MTH102">MTH102 - Calculus II</option>
+                                                    <option value="MTH201">MTH201 - Linear Algebra</option>
+                                                    <option value="PHY101">PHY101 - Physics I</option>
+                                                </select>
+                                                <div id="course-error" class="error-message"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="semester">Semester <span class="required">*</span></label>
+                                                <select id="semester" name="semester" required>
+                                                    <option value="">Select Semester</option>
+                                                    <option value="1">1st Semester</option>
+                                                    <option value="2">2nd Semester</option>
+                                                    <option value="3">3rd Semester</option>
+                                                    <option value="4">4th Semester</option>
+                                                    <option value="5">5th Semester</option>
+                                                    <option value="6">6th Semester</option>
+                                                    <option value="7">7th Semester</option>
+                                                    <option value="8">8th Semester</option>
+                                                </select>
+                                                <div id="semester-error" class="error-message"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="description">Description <span class="required">*</span></label>
+                                            <textarea id="description" name="description" rows="4" placeholder="Provide a brief description of your notes..." required></textarea>
+                                            <div id="description-error" class="error-message"></div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tags">Tags (Optional)</label>
+                                            <input type="text" id="tags" name="tags" placeholder="e.g., midterm, final, complete, algorithms">
+                                            <p class="input-hint">Separate tags with commas</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-section">
+                                        <h3>Terms & Conditions</h3>
+                                        <div class="form-group checkbox-group">
+                                            <input type="checkbox" id="terms" name="terms" required>
+                                            <label for="terms">I confirm that I have the right to share this content and it does not violate any copyright laws or university policies.</label>
+                                            <div id="terms-error" class="error-message"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-sidebar">
+                                    <div class="guidelines-card">
+                                        <h3><i class="fas fa-lightbulb"></i> Upload Guidelines</h3>
+                                        <ul>
+                                            <li>Make sure your notes are clear, organized, and easy to understand.</li>
+                                            <li>Include a descriptive title that clearly indicates the content.</li>
+                                            <li>Add relevant tags to help others find your notes.</li>
+                                            <li>Only upload content that you have the right to share.</li>
+                                            <li>Ensure your notes are free from errors and typos.</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="guidelines-card">
+                                        <h3><i class="fas fa-award"></i> Earn Points</h3>
+                                        <p>Earn points for every upload and climb the leaderboard!</p>
+                                        <ul>
+                                            <li>10 points for each upload</li>
+                                            <li>5 points for each download of your notes</li>
+                                            <li>15 points for each 5-star rating</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" id="cancel-upload" class="btn btn-outline">Cancel</button>
+                                <button type="submit" id="submit-upload" class="btn btn-primary">Upload Notes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+</body>
+</html> 

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ note.title }} - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/note-details.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button class="sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="user-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="user-name">{{ current_user.username }}</h3>
+                    <p id="user-semester">{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('upload_notes') }}"><i class="fas fa-upload"></i><span>Upload Notes</span></a></li>
+                    <li class="active"><a href="{{ url_for('browse_notes') }}"><i class="fas fa-book"></i><span>Browse Notes</span></a></li>
+                    <li><a href="{{ url_for('forum') }}"><i class="fas fa-comments"></i><span>Forum</span></a></li>
+                    <li><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i><span>My Profile</span></a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" id="logout-btn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                    <h1 style="font-size:1.25rem;">Note details</h1>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="note-details-container">
+                    <div class="note-details-header">
+                        <div class="back-button">
+                            <a href="{{ url_for('browse_notes') }}"><i class="fas fa-arrow-left"></i><span>Back to Browse</span></a>
+                        </div>
+                    </div>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        <div style="margin:1rem 0;">
+                        {% for cat, msg in messages %}
+                          <div class="alert alert-{{ 'danger' if cat == 'error' else cat }}">{{ msg }}</div>
+                        {% endfor %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+
+                    <div class="note-details-content">
+                        <div class="note-details-main">
+                            <div class="note-details-card">
+                                <div class="note-details-info">
+                                    <h1>{{ note.title }}</h1>
+                                    <div class="note-meta">
+                                        <span class="course-info">{{ note.course }} · Semester {{ note.semester }}</span>
+                                        {% if note.category %}<span> · {{ note.category }}</span>{% endif %}
+                                    </div>
+                                    <div class="uploader-info" style="margin-top:1rem;">
+                                        <div>
+                                            <p>Uploaded by <strong>{{ note.uploader.username if note.uploader else 'Unknown' }}</strong></p>
+                                            {% if note.created_at %}<p class="upload-date">{{ note.created_at.strftime('%Y-%m-%d') }}</p>{% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="note-stats" style="display:flex;gap:1.5rem;margin-top:1rem;flex-wrap:wrap;">
+                                        <div class="stat"><i class="fas fa-download"></i><span>{{ note.download_count or 0 }} Downloads</span></div>
+                                        <div class="stat"><i class="fas fa-thumbs-up"></i><span>{{ upvotes }} Upvotes</span></div>
+                                    </div>
+                                </div>
+                                {% if note.description %}
+                                <div class="note-details-description">
+                                    <h3>Description</h3>
+                                    <p style="white-space:pre-wrap;">{{ note.description }}</p>
+                                </div>
+                                {% endif %}
+                                <div class="note-details-download" style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+                                    <a class="btn btn-primary" href="{{ url_for('download_note', note_id=note.id) }}"><i class="fas fa-download"></i> Download</a>
+                                    <form method="POST" action="{{ url_for('toggle_upvote', note_id=note.id) }}" style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-outline">
+                                            {% if user_upvoted %}<i class="fas fa-thumbs-down"></i> Remove upvote{% else %}<i class="fas fa-thumbs-up"></i> Upvote{% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="note-details-card">
+                                <div class="note-comments-section">
+                                    <h3>Comments</h3>
+                                    <form method="POST" action="{{ url_for('add_note_comment', note_id=note.id) }}" class="comment-form">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <textarea name="body" class="comment-input" rows="3" required maxlength="8000" placeholder="Discuss or ask about this resource"></textarea>
+                                        <button type="submit" class="btn btn-primary post-comment">Post comment</button>
+                                    </form>
+                                    <div class="comments-list" style="margin-top:1rem;">
+                                        {% for c in comments %}
+                                        <div class="comment" style="border-bottom:1px solid #eee;padding:0.75rem 0;">
+                                            <div class="comment-header">
+                                                <strong>{{ c.author.username if c.author else 'User' }}</strong>
+                                                {% if c.created_at %}<span class="comment-date" style="color:#888;margin-left:0.5rem;">{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}</span>{% endif %}
+                                            </div>
+                                            <div class="comment-content"><p style="white-space:pre-wrap;">{{ c.body }}</p></div>
+                                        </div>
+                                        {% else %}
+                                        <p>No comments yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="note-details-sidebar">
+                            <div class="note-details-card">
+                                <div class="related-notes">
+                                    <h3>Related notes</h3>
+                                    <div class="related-notes-list">
+                                        {% for rn in related_notes %}
+                                        <div class="related-note">
+                                            <div class="related-note-info">
+                                                <div>
+                                                    <h4><a href="{{ url_for('note_details', note_id=rn.id) }}">{{ rn.title }}</a></h4>
+                                                    <p>{{ rn.course }} · Sem {{ rn.semester }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <p>No related notes.</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/note-details.js') }}"></script>
+</body>
+</html>

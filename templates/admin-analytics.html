@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header"><h2>Admin</h2></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('manage_resources') }}"><i class="fas fa-book"></i><span>Resources</span></a></li>
+                    <li><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i><span>Users</span></a></li>
+                    <li><a href="{{ url_for('admin_comments') }}"><i class="fas fa-comments"></i><span>Comments</span></a></li>
+                    <li class="active"><a href="{{ url_for('admin_analytics') }}"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+                    <li><a href="{{ url_for('admin_logs') }}"><i class="fas fa-list"></i><span>Logs</span></a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="content-header"><h1>Data reporting & analytics</h1></header>
+            <section style="margin:1rem;">
+                <h2>Most upvoted notes</h2>
+                <table class="admin-table">
+                    <thead><tr><th>Title</th><th>Course</th><th>Upvotes</th></tr></thead>
+                    <tbody>
+                        {% for note, uv in top_notes %}
+                        <tr>
+                            <td><a href="{{ url_for('note_details', note_id=note.id) }}">{{ note.title }}</a></td>
+                            <td>{{ note.course }}</td>
+                            <td>{{ uv }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3">No notes.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            <section style="margin:1rem;">
+                <h2>Most active contributors</h2>
+                <table class="admin-table">
+                    <thead><tr><th>User</th><th>Activity score</th></tr></thead>
+                    <tbody>
+                        {% for u, score in top_contributors %}
+                        <tr><td>{{ u.username }}</td><td>{{ score }}</td></tr>
+                        {% else %}
+                        <tr><td colspan="2">No users.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            <section style="margin:1rem;">
+                <h2>Most downloaded notes</h2>
+                <table class="admin-table">
+                    <thead><tr><th>Title</th><th>Course</th><th>Downloads</th></tr></thead>
+                    <tbody>
+                        {% for note in most_downloaded %}
+                        <tr>
+                            <td><a href="{{ url_for('note_details', note_id=note.id) }}">{{ note.title }}</a></td>
+                            <td>{{ note.course }}</td>
+                            <td>{{ note.download_count or 0 }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3">No notes.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

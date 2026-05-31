@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Testimonials - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="logo">FAST Parhai - Admin</a>
+            <div class="nav-links">
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_testimonials') }}" class="active">Testimonials</a>
+                <a href="{{ url_for('admin_users') }}">Users</a>
+                <a href="{{ url_for('admin_analytics') }}">Analytics</a>
+                <a href="{{ url_for('admin_comments') }}">Comments</a>
+                <a href="{{ url_for('admin_logs') }}">Logs</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="container">
+            <div class="section-header">
+                <h1><i class="fas fa-comments"></i> Testimonials Management</h1>
+                <p>Review and approve student testimonials</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for cat, msg in messages %}
+                  <div class="alert alert-{{ cat }}">{{ msg }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <!-- Pending Testimonials Section -->
+            <section class="admin-section">
+                <h2><i class="fas fa-hourglass"></i> Pending Testimonials ({{ pending|length }})</h2>
+                {% if pending %}
+                    <div class="testimonials-list">
+                        {% for testimonial in pending %}
+                            <div class="testimonial-item">
+                                <div class="testimonial-header">
+                                    <h3>{{ testimonial.author_name }}</h3>
+                                    <span class="semester-badge">{{ testimonial.author_semester }}</span>
+                                </div>
+                                <div class="testimonial-content">
+                                    <p>"{{ testimonial.content }}"</p>
+                                </div>
+                                <div class="testimonial-footer">
+                                    <small class="timestamp"><i class="fas fa-clock"></i> {{ testimonial.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    <div class="action-buttons">
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="testimonial_id" value="{{ testimonial.id }}">
+                                            <input type="hidden" name="action" value="approve">
+                                            <button type="submit" class="btn btn-approve"><i class="fas fa-check"></i> Approve</button>
+                                        </form>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="testimonial_id" value="{{ testimonial.id }}">
+                                            <input type="hidden" name="action" value="reject">
+                                            <button type="submit" class="btn btn-reject" onclick="return confirm('Are you sure you want to reject this testimonial?');"><i class="fas fa-times"></i> Reject</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-state"><i class="fas fa-check-circle"></i> No pending testimonials. All testimonials have been reviewed!</p>
+                {% endif %}
+            </section>
+
+            <!-- Approved Testimonials Section -->
+            <section class="admin-section">
+                <h2><i class="fas fa-check-circle"></i> Approved Testimonials ({{ approved|length }})</h2>
+                {% if approved %}
+                    <div class="testimonials-list">
+                        {% for testimonial in approved %}
+                            <div class="testimonial-item approved">
+                                <div class="testimonial-header">
+                                    <h3>{{ testimonial.author_name }}</h3>
+                                    <span class="semester-badge">{{ testimonial.author_semester }}</span>
+                                </div>
+                                <div class="testimonial-content">
+                                    <p>"{{ testimonial.content }}"</p>
+                                </div>
+                                <div class="testimonial-footer">
+                                    <small class="timestamp"><i class="fas fa-clock"></i> Approved on {{ testimonial.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-state"><i class="fas fa-inbox"></i> No approved testimonials yet.</p>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <style>
+        .admin-container {
+            background: #f5f5f5;
+            min-height: calc(100vh - 70px);
+            padding: 2rem 0;
+        }
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #2193b0;
+        }
+        .section-header h1 {
+            font-size: 2rem;
+            color: #2193b0;
+            margin-bottom: 0.5rem;
+        }
+        .admin-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .admin-section h2 {
+            color: #2193b0;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        .testimonials-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .testimonial-item {
+            background: #f9f9f9;
+            border-left: 4px solid #6dd5ed;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: box-shadow 0.2s;
+        }
+        .testimonial-item:hover {
+            box-shadow: 0 4px 12px rgba(33, 147, 176, 0.1);
+        }
+        .testimonial-item.approved {
+            border-left-color: #4caf50;
+            background: #f1f8f4;
+        }
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .testimonial-header h3 {
+            color: #2193b0;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .semester-badge {
+            background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .testimonial-content {
+            margin-bottom: 1rem;
+        }
+        .testimonial-content p {
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            font-style: italic;
+        }
+        .testimonial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .timestamp {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        .btn-approve {
+            background: #4caf50;
+            color: white;
+        }
+        .btn-approve:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .btn-reject {
+            background: #f44336;
+            color: white;
+        }
+        .btn-reject:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 2rem 1rem;
+            font-size: 1.1rem;
+        }
+        .empty-state i {
+            display: block;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #f5c6cb;
+        }
+        @media (max-width: 768px) {
+            .testimonial-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .testimonial-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .action-buttons {
+                width: 100%;
+            }
+            .action-buttons form {
+                flex: 1;
+            }
+            .action-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</body>
+</html>

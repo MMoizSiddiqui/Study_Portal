@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST Parhai - Academic Resource Sharing Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%);
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero {
+            background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%);
+            border-radius: 2rem;
+            margin: 2rem auto 2rem auto;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            overflow: hidden;
+            position: relative;
+            color: #fff;
+            padding: 3rem 0 2rem 0;
+            max-width: 1100px;
+        }
+        .hero-content h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hero-content h1::before {
+            content: '🚀';
+            font-size: 2.2rem;
+            margin-right: 0.5rem;
+        }
+        .hero-image img {
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.7);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+            padding: 2rem 1.2rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            background: rgba(255,255,255,0.95);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #2193b0;
+            margin-bottom: 1rem;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .feature-card:hover .feature-icon {
+            color: #6dd5ed;
+            transform: scale(1.2) rotate(-8deg);
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.8);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            margin: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2193b0;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.2rem;
+            color: #6dd5ed;
+            animation: countup 1.2s;
+        }
+        @keyframes countup {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .btn, .btn-primary, .btn-outline {
+            border-radius: 2rem !important;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .btn-outline {
+            border: 2px solid #2193b0;
+            color: #2193b0;
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: #2193b0;
+            color: #fff;
+            border-color: #6dd5ed;
+        }
+        .testimonial {
+            background: rgba(255,255,255,0.8);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+            padding: 2rem 1.5rem;
+            margin: 1rem 0;
+            border-left: 6px solid #6dd5ed;
+            position: relative;
+        }
+        .testimonial::before {
+            content: '💬';
+            position: absolute;
+            left: 1.2rem;
+            top: 1.2rem;
+            font-size: 1.5rem;
+        }
+        .testimonial-slider {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+        .testimonial {
+            min-width: 320px;
+            scroll-snap-align: start;
+        }
+        .footer-content, .footer-bottom {
+            background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+            color: #fff;
+            border-radius: 1.2rem 1.2rem 0 0;
+        }
+        .footer-links a, .footer-contact a {
+            color: #fff;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover, .footer-contact a:hover {
+            color: #6dd5ed;
+        }
+        .social-icons a {
+            font-size: 1.3rem;
+            margin-right: 0.7rem;
+            color: #fff;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .social-icons a:hover {
+            color: #6dd5ed;
+            transform: scale(1.2) rotate(-8deg);
+        }
+        .nav-menu {
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+            margin-bottom: 1.5rem;
+        }
+        .nav-links a {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-links a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+            transition: width 0.3s;
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-links a:hover {
+            color: #6dd5ed;
+        }
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                padding: 2rem 0 1rem 0;
+            }
+            .hero-content, .hero-image {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-menu">
+            <a href="/" class="logo">FAST Parhai</a>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact</a>
+                <div class="auth-buttons">
+                    <a href="/login" class="login-btn">Login</a>
+                    <a href="/register" class="register-btn btn-primary">Register</a>
+                    <button id="theme-toggle" class="theme-toggle-btn" title="Toggle dark/light mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Welcome to FAST Parhai</h1>
+                    <p>Your ultimate platform for sharing and accessing academic resources within the FAST community.</p>
+                    <div class="cta-buttons">
+                        <a href="/register" class="btn btn-primary btn-large">Join FAST Parhai Today!</a>
+                        <a href="#how-it-works" class="btn btn-outline btn-large">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='images/HP.jpg') }}" alt="Students collaborating">
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="features">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Share Notes</h3>
+                        <p>Upload and share your lecture notes, assignments, and study materials with fellow students.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Access Resources</h3>
+                        <p>Browse and download high-quality academic resources shared by your peers.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Rate & Review</h3>
+                        <p>Rate resources and provide feedback to help others find the best materials.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Discussion Forum</h3>
+                        <p>Ask questions, participate in discussions, and connect with fellow students.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-preview">
+            <div class="container">
+                <div class="about-content">
+                    <h2 class="section-title">About FAST Parhai</h2>
+                    <p>FAST Parhai is a student-driven platform designed to foster academic collaboration and resource sharing within the FAST University community. Our mission is to create a centralized hub where students can easily access quality study materials, share their knowledge, and help each other succeed academically.</p>
+                    <p>Whether you're looking for lecture notes, past papers, or want to discuss course-related topics, FAST Parhai provides the tools and community to enhance your learning experience.</p>
+                    <a href="/about" class="btn btn-outline">Learn More About Us</a>
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>500+</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>1,000+</h3>
+                        <p>Shared Resources</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>50+</h3>
+                        <p>Courses Covered</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">What Students Say</h2>
+                <div class="testimonial-slider">
+                    {% if testimonials %}
+                        {% for testimonial in testimonials %}
+                            <div class="testimonial">
+                                <div class="testimonial-content">
+                                    <p>"{{ testimonial.content }}"</p>
+                                </div>
+                                <div class="testimonial-author">
+                                    <div class="author-info">
+                                        <h4>{{ testimonial.author_name }}</h4>
+                                        <p>{{ testimonial.author_semester }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: #666; font-size: 1.1rem; margin: 2rem 0;">Be the first to share your experience! Visit the <a href="/about" style="color: #2193b0; text-decoration: none; font-weight: 600;">About page</a> to submit your testimonial.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section" style="background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%); border-radius: 2rem; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); margin: 3rem auto 0 auto; max-width: 900px; text-align: center; color: #fff; position: relative; overflow: hidden;">
+            <div style="position: absolute; left: 1.5rem; top: 1.5rem; font-size: 2.5rem; opacity: 0.15;">🌟</div>
+            <div class="container" style="position: relative; z-index: 2;">
+                <h2 style="font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem;">Ready to enhance your academic journey?</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 2rem;">Join FAST Parhai today and connect with fellow students, access quality resources, and contribute to the community.</p>
+                <a href="/register" class="btn btn-primary btn-large" style="box-shadow: 0 4px 24px 0 rgba(33,147,176,0.18); font-size: 1.2rem; padding: 0.9rem 2.5rem; transition: transform 0.2s;">Get Started Now</a>
+            </div>
+        </section>
+
+        <div style="width: 100%; margin-top: -2px;">
+            <svg viewBox="0 0 1440 80" width="100%" height="80" style="display: block;" xmlns="http://www.w3.org/2000/svg"><path fill="#e0f7fa" fill-opacity="1" d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,53.3C840,43,960,21,1080,16C1200,11,1320,21,1380,26.7L1440,32L1440,80L1380,80C1320,80,1200,80,1080,80C960,80,840,80,720,80C600,80,480,80,360,80C240,80,120,80,60,80L0,80Z"></path></svg>
+        </div>
+
+        <footer style="background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 2rem 2rem 0 0; box-shadow: 0 -4px 24px 0 rgba(33,147,176,0.10); margin-top: -2rem;">
+            <div class="container">
+                <div class="footer-content" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; padding: 2.5rem 0 1.5rem 0;">
+                    <div class="footer-logo">
+                        <h2 style="color: #2193b0; font-weight: 700;">FAST Parhai</h2>
+                        <p style="color: #333;">Academic Resource Sharing Platform</p>
+                    </div>
+                    <div class="footer-links">
+                        <h3 style="color: #2193b0;">Quick Links</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><a href="/" style="color: #2193b0;">Home</a></li>
+                            <li><a href="/about" style="color: #2193b0;">About</a></li>
+                            <li><a href="/contact" style="color: #2193b0;">Contact</a></li>
+                            <li><a href="/login" style="color: #2193b0;">Login</a></li>
+                            <li><a href="/register" style="color: #2193b0;">Register</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h3 style="color: #2193b0;">Contact Us</h3>
+                        <p style="color: #333;"><i class="fas fa-envelope"></i> support@fastparhai.edu</p>
+                        <p style="color: #333;"><i class="fas fa-map-marker-alt"></i> FAST University Campus</p>
+                        <div class="social-icons" style="margin-top: 1rem;">
+                            <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-facebook"></i></a>
+                            <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-twitter"></i></a>
+                            <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-instagram"></i></a>
+                            <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom" style="text-align: center; color: #2193b0; padding: 1rem 0 0.5rem 0; font-size: 1rem;">
+                    <p>&copy; 2023 FAST Parhai. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+    // Animate social icons on hover
+    document.querySelectorAll('.social-icons a').forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            icon.style.color = '#6dd5ed';
+            icon.style.transform = 'scale(1.2) rotate(-8deg)';
+        });
+        icon.addEventListener('mouseleave', () => {
+            icon.style.color = '#2193b0';
+            icon.style.transform = 'none';
+        });
+    });
+    // Button bounce on hover
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.style.transform = 'scale(1.08)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+        });
+    });
+    </script>
+</body>
+</html>

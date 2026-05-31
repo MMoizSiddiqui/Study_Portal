@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ question.title }} - Forum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forum.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button id="sidebarToggle" class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="Avatar">
+                </div>
+                <div class="user-info">
+                    <h3>{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('upload_notes') }}"><i class="fas fa-upload"></i><span>Upload</span></a></li>
+                    <li><a href="{{ url_for('browse_notes') }}"><i class="fas fa-book"></i><span>Browse Notes</span></a></li>
+                    <li class="active"><a href="{{ url_for('forum') }}"><i class="fas fa-comments"></i><span>Forum</span></a></li>
+                    <li class="sidebar-divider"></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Discussion</h1>
+                </div>
+            </header>
+            <div class="forum-container" style="max-width:900px;margin:0 auto;">
+                <p><a href="{{ url_for('forum') }}"><i class="fas fa-arrow-left"></i> Back to forum</a></p>
+                <div class="question-card" style="margin-bottom:1.5rem;">
+                    <div class="question-content">
+                        <h2 class="question-title">{{ question.title }}</h2>
+                        <div class="question-meta">
+                            <span>{{ question.category }}</span> ·
+                            <span>Semester {{ question.semester }}</span>
+                            {% if question.created_at %} · <span>{{ question.created_at.strftime('%Y-%m-%d %H:%M') }} UTC</span>{% endif %}
+                        </div>
+                        <div class="question-excerpt" style="white-space:pre-wrap;margin-top:1rem;">{{ question.content }}</div>
+                        <p class="question-author" style="margin-top:1rem;">
+                            <strong>Asked by:</strong>
+                            {% if question.is_anonymous %}Anonymous{% elif question.author %}{{ question.author.username }}{% else %}User{% endif %}
+                        </p>
+                        {% if question.tags %}
+                        <div class="question-tags">{% for t in question.tags.split(',') %}<span class="tag">{{ t.strip() }}</span>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if current_user.is_admin %}
+                <form method="POST" action="{{ url_for('admin_delete_question', question_id=question.id) }}" onsubmit="return confirm('Delete this question and all answers?');" style="margin-bottom:1rem;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Admin: delete question</button>
+                </form>
+                {% endif %}
+
+                <h3 style="margin:1.5rem 0 0.5rem;">Answers ({{ answers|length }})</h3>
+                {% for ans in answers %}
+                <div class="question-card" style="margin-bottom:1rem;">
+                    <div class="question-content">
+                        <p style="white-space:pre-wrap;">{{ ans.content }}</p>
+                        <p class="question-meta"><strong>{{ ans.author.username if ans.author else 'User' }}</strong>
+                            {% if ans.created_at %} · {{ ans.created_at.strftime('%Y-%m-%d') }}{% endif %}
+                        </p>
+                        {% if current_user.is_admin %}
+                        <form method="POST" action="{{ url_for('admin_delete_answer', answer_id=ans.id) }}" onsubmit="return confirm('Delete this answer?');" style="margin-top:0.5rem;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-sm btn-outline">Admin: remove answer</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <p>No answers yet. Be the first to reply below.</p>
+                {% endfor %}
+
+                <div class="upload-card" style="margin-top:2rem;padding:1.5rem;">
+                    <h3>Your answer</h3>
+                    <form method="POST" action="{{ url_for('answer') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" name="question_id" value="{{ question.id }}"/>
+                        <textarea name="answer" rows="5" required class="form-group" style="width:100%;padding:0.75rem;border-radius:8px;border:1px solid #ccc;" placeholder="Write your answer..."></textarea>
+                        <button type="submit" class="btn btn-primary" style="margin-top:0.75rem;">Submit answer</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

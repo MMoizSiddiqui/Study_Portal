@@ -1,0 +1,6 @@
+Flask>=2.3
+Flask-Login>=0.6
+Flask-SQLAlchemy>=3.0
+Flask-WTF>=1.2
+Werkzeug>=3.0
+PyMySQL>=1.1

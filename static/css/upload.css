@@ -1,0 +1,352 @@
+/* Upload Page Styles */
+.upload-container {
+    padding: 1.5rem 0;
+    max-width: 100%;
+  }
+  
+  .upload-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  
+  .upload-intro {
+    margin-bottom: 2rem;
+  }
+  
+  .upload-intro h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+  }
+  
+  .upload-intro p {
+    color: var(--text-light);
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+  
+  .upload-form {
+    max-width: 100%;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+  
+  .form-section {
+    margin-bottom: 2rem;
+    background-color: var(--gray-50);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+  }
+  
+  .form-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-color);
+    font-weight: 600;
+  }
+  
+  .file-upload-area {
+    position: relative;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    transition: var(--transition);
+    background-color: var(--white);
+  }
+  
+  .file-upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+  }
+  
+  .file-upload-area input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .file-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .file-upload-content i {
+    font-size: 3rem;
+    color: var(--primary-color);
+  }
+  
+  .file-upload-content p {
+    margin-bottom: 0;
+    color: var(--text-color);
+  }
+  
+  .browse-link {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .file-types {
+    font-size: 0.875rem;
+    color: var(--text-light);
+  }
+  
+  .file-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+  }
+  
+  .file-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .file-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+  }
+  
+  .file-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .file-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  .file-size {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 0;
+  }
+  
+  .remove-file {
+    color: var(--danger-color);
+    font-size: 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .form-group .required {
+    color: var(--danger-color);
+  }
+  
+  .form-group input[type="text"],
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--white);
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  
+  .form-group input[type="text"]:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .input-hint {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    margin-top: 0.25rem;
+  }
+  
+  .checkbox-group label {
+    margin-bottom: 0;
+    font-weight: normal;
+  }
+  
+  .error-message {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    font-size: 1rem;
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+  }
+  
+  .btn-outline:hover {
+    background-color: var(--gray-100);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  /* Upload Guidelines */
+  .guidelines-card {
+    background-color: var(--gray-50);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .guidelines-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+  }
+  
+  .guidelines-card h3 i {
+    font-size: 1.25rem;
+  }
+  
+  .guidelines-card ul {
+    padding-left: 1.5rem;
+    list-style-type: disc;
+  }
+  
+  .guidelines-card ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+  }
+  
+  .guidelines-card p {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .form-sidebar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+  
+    .guidelines-card {
+      margin-bottom: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .form-sidebar {
+      grid-template-columns: 1fr;
+    }
+  
+    .guidelines-card {
+      margin-bottom: 1.5rem;
+    }
+  
+    .guidelines-card:last-child {
+      margin-bottom: 0;
+    }
+  
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .upload-card {
+      padding: 1.5rem;
+    }
+  
+    .form-section {
+      padding: 1.25rem;
+    }
+  
+    .file-upload-area {
+      padding: 1.5rem;
+    }
+  
+    .form-actions {
+      flex-direction: column;
+    }
+  
+    .form-actions button {
+      width: 100%;
+    }
+  }
+  

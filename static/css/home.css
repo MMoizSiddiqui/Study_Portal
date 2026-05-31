@@ -1,0 +1,228 @@
+/* Home Page Styles */
+
+/* Hero Section */
+.hero {
+    padding: 4rem 0;
+    background-color: var(--primary-light);
+  }
+  
+  .hero .container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .hero-content {
+    flex: 1;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  
+  .hero-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .hero-image img {
+    max-width: 100%;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Features Section */
+  .features {
+    padding: 4rem 0;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--primary-color);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border-radius: var(--border-radius-full);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .feature-card h3 {
+    margin-bottom: 1rem;
+  }
+  
+  /* About Section */
+  .about {
+    padding: 4rem 0;
+    background-color: var(--secondary-color);
+  }
+  
+  .about-content {
+    margin-bottom: 3rem;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    flex: 1;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  
+  .stat-card h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Testimonials Section */
+  .testimonials {
+    padding: 4rem 0;
+  }
+  
+  .testimonial-slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .testimonial {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+  }
+  
+  .testimonial-content {
+    margin-bottom: 1.5rem;
+  }
+  
+  .testimonial-content p {
+    font-style: italic;
+    color: var(--text-color);
+  }
+  
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .author-image {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--border-radius-full);
+    object-fit: cover;
+  }
+  
+  .author-info h4 {
+    margin-bottom: 0.25rem;
+  }
+  
+  .author-info p {
+    color: var(--text-light);
+    font-size: 0.875rem;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    padding: 4rem 0;
+    background-color: var(--primary-light);
+    text-align: center;
+  }
+  
+  .cta-section h2 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  
+  .cta-section p {
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .hero .container {
+      flex-direction: column;
+    }
+  
+    .hero-content,
+    .hero-image {
+      width: 100%;
+    }
+  
+    .hero-image {
+      justify-content: center;
+      margin-top: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .stats {
+      flex-direction: column;
+    }
+  
+    .stat-card {
+      width: 100%;
+    }
+  
+    .cta-buttons {
+      flex-direction: column;
+    }
+  
+    .cta-buttons .btn {
+      width: 100%;
+    }
+  }
+  

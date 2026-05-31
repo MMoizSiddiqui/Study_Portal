@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forum.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="sidebar-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('upload_notes') }}">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('browse_notes') }}">
+                            <i class="fas fa-book"></i>
+                            <span>Browse Notes</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{{ url_for('forum') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>Forum</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-divider"></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Discussion Forum</h1>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="forum-container">
+                <div class="forum-header">
+                    <div class="forum-search">
+                        <input type="text" placeholder="Search questions..." id="forum-search-input">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="ask-question-btn">
+                        <i class="fas fa-plus"></i> Ask a Question
+                    </button>
+                </div>
+
+                <div class="forum-filters">
+                    <div class="filter-group">
+                        <label for="filter-category">Category:</label>
+                        <select id="filter-category">
+                            <option value="all">All Categories</option>
+                            <option value="general">General</option>
+                            <option value="courses">Courses</option>
+                            <option value="exams">Exams & Quizzes</option>
+                            <option value="projects">Projects</option>
+                            <option value="career">Career</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-sort">Sort By:</label>
+                        <select id="filter-sort">
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                            <option value="most-answers">Most Answers</option>
+                            <option value="no-answers">No Answers</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-semester">Semester:</label>
+                        <select id="filter-semester">
+                            <option value="all">All Semesters</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="forum-questions">
+                    {% for question in questions %}
+                    <div class="question-card">
+                        <div class="question-stats">
+                            <div class="stat">
+                                <span class="stat-value">{{ question.answers|length }}</span>
+                                <span class="stat-label">Answers</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">N/A</span>
+                                <span class="stat-label">Views</span>
+                            </div>
+                        </div>
+                        <div class="question-content">
+                            <h3 class="question-title">
+                                <a href="{{ url_for('forum_question_detail', question_id=question.id) }}">{{ question.title }}</a>
+                            </h3>
+                            <div class="question-meta">
+                                <span class="question-category">{{ question.category }}</span>
+                                <span class="question-semester">{{ question.semester }}</span>
+                                <span class="question-time">{% if question.created_at %}{{ question.created_at.strftime('%Y-%m-%d') }}{% else %}—{% endif %}</span>
+                            </div>
+                            <p class="question-excerpt">{{ question.content[:120] }}{% if question.content|length > 120 %}...{% endif %}</p>
+                            <div class="question-tags">
+                                {% if question.tags %}{% for t in question.tags.split(',')[:5] %}<span class="tag">{{ t.strip() }}</span>{% endfor %}{% endif %}
+                            </div>
+                            <div class="question-author">
+                                <img src="https://via.placeholder.com/40" alt="User Avatar">
+                                <span>Asked by: {% if question.is_anonymous %}Anonymous{% elif question.author %}{{ question.author.username }}{% else %}User{% endif %}</span>
+                            </div>
+                            <button class="btn btn-outline btn-sm answer-btn" onclick="openAnswerModal({{ question.id }})">
+                                <i class="fas fa-reply"></i> Answer
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="pagination">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Ask Question Modal -->
+    <div class="modal" id="ask-question-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ask a Question</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="ask-question-form" method="POST" action="{{ url_for('forum_ask') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="form-group">
+                        <label for="question-title">Question Title</label>
+                        <input type="text" id="question-title" name="title" required minlength="5" placeholder="Be specific and concise">
+                        <small class="form-text">Minimum 5 characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="question-category">Category</label>
+                        <select id="question-category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="general">General</option>
+                            <option value="courses">Courses</option>
+                            <option value="exams">Exams & Quizzes</option>
+                            <option value="projects">Projects</option>
+                            <option value="career">Career</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="question-semester">Related Semester</label>
+                        <select id="question-semester" name="semester" required>
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                            <option value="all">All Semesters</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="question-content">Question Details</label>
+                        <textarea id="question-content" name="content" rows="6" required minlength="10" placeholder="Provide all the details needed to answer your question"></textarea>
+                        <small class="form-text">Minimum 10 characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="question-tags">Tags</label>
+                        <input type="text" id="question-tags" name="tags" placeholder="Add up to 5 tags separated by commas">
+                        <small class="form-text">E.g., Database, SQL, Algorithms</small>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="anonymous-question" name="anonymous" value="on">
+                        <label for="anonymous-question">Post anonymously</label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Post Question</button>
+                        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer Modal -->
+    <div class="modal" id="answer-modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Submit Your Answer</h3>
+                <button class="modal-close" onclick="closeAnswerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="answer-form" method="POST" action="{{ url_for('answer') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" id="answer-question-id" name="question_id" value="">
+                    <div class="form-group">
+                        <label for="answer-content">Your Answer</label>
+                        <textarea id="answer-content" name="answer" rows="5" required placeholder="Write your answer here..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit Answer</button>
+                        <button type="button" class="btn btn-outline modal-close" onclick="closeAnswerModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/forum.js') }}"></script>
+    <script>
+    function openAnswerModal(questionId) {
+        document.getElementById('answer-modal').style.display = 'block';
+        document.getElementById('answer-question-id').value = questionId;
+    }
+    function closeAnswerModal() {
+        document.getElementById('answer-modal').style.display = 'none';
+    }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header"><h2>Admin</h2></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('manage_resources') }}"><i class="fas fa-book"></i><span>Resources</span></a></li>
+                    <li class="active"><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i><span>Users</span></a></li>
+                    <li><a href="{{ url_for('admin_comments') }}"><i class="fas fa-comments"></i><span>Comments</span></a></li>
+                    <li><a href="{{ url_for('admin_analytics') }}"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+                    <li><a href="{{ url_for('admin_logs') }}"><i class="fas fa-list"></i><span>Logs</span></a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="content-header"><h1>Manage users</h1></header>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div style="margin:1rem;">
+                {% for cat, msg in messages %}
+                  <div class="alert alert-{{ 'danger' if cat == 'error' else cat }}">{{ msg }}</div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            <div class="admin-table-container" style="margin:1rem;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Username</th><th>Email</th><th>Admin</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{% if u.is_admin %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if u.is_suspended %}Suspended{% else %}Active{% endif %}</td>
+                            <td>
+                                {% if u.id != current_user.id %}
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                    <input type="hidden" name="user_id" value="{{ u.id }}"/>
+                                    {% if u.is_suspended %}
+                                    <button name="action" value="unsuspend" type="submit" class="btn btn-sm btn-outline">Unsuspend</button>
+                                    {% else %}
+                                    <button name="action" value="suspend" type="submit" class="btn btn-sm btn-warning">Suspend</button>
+                                    {% endif %}
+                                    <button name="action" value="toggle_admin" type="submit" class="btn btn-sm btn-outline">Toggle admin</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Notes - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/browse.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button id="sidebarToggle" class="sidebar-toggle" title="Toggle Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="sidebar-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('upload_notes') }}">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload Notes</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{{ url_for('browse_notes') }}">
+                            <i class="fas fa-book"></i>
+                            <span>Browse Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('forum') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>Forum</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-divider"></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Content Header -->
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="headerToggle" class="header-toggle" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Browse Notes</h1>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Browse Notes Content -->
+            <div class="dashboard-content">
+                <div class="browse-container">
+                    <form class="browse-header" method="get" action="{{ url_for('browse_notes') }}" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;">
+                        <div class="search-input" style="flex:1;min-width:220px;">
+                            <i class="fas fa-search"></i>
+                            <input type="text" name="q" value="{{ filters.q }}" placeholder="Keyword in title, course, description…">
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label for="filter-semester">Semester</label>
+                            <select id="filter-semester" name="semester">
+                                <option value="">Any</option>
+                                {% for s in semesters %}<option value="{{ s }}" {% if filters.semester == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label for="filter-course">Course</label>
+                            <select id="filter-course" name="course">
+                                <option value="">Any</option>
+                                {% for c in courses %}<option value="{{ c }}" {% if filters.course == c %}selected{% endif %}>{{ c }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label for="filter-ext">Type</label>
+                            <select id="filter-ext" name="ext">
+                                <option value="">Any</option>
+                                <option value="pdf" {% if filters.ext == 'pdf' %}selected{% endif %}>PDF</option>
+                                <option value="docx" {% if filters.ext == 'docx' %}selected{% endif %}>DOCX</option>
+                                <option value="pptx" {% if filters.ext == 'pptx' %}selected{% endif %}>PPTX</option>
+                            </select>
+                        </div>
+                        <div class="sort-by">
+                            <label for="sort-by">Sort</label>
+                            <select id="sort-by" name="sort">
+                                <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest</option>
+                                <option value="popular" {% if filters.sort == 'popular' %}selected{% endif %}>Most upvoted</option>
+                                <option value="downloads" {% if filters.sort == 'downloads' %}selected{% endif %}>Most downloads</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Apply</button>
+                        <button type="button" id="filter-toggle" class="filter-toggle-btn">
+                            <i class="fas fa-filter"></i><span>More filters</span>
+                        </button>
+                    </form>
+
+                    <div class="browse-content">
+                        <aside class="filters-section">
+                            <div class="filters-header">
+                                <h3>Filters</h3>
+                                <button id="clear-filters" class="clear-filters-btn">Clear All</button>
+                            </div>
+
+                            <div class="filter-group">
+                                <h4>Semester</h4>
+                                <div class="filter-options">
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem1" name="semester" value="1">
+                                        <label for="sem1">1st Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem2" name="semester" value="2">
+                                        <label for="sem2">2nd Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem3" name="semester" value="3">
+                                        <label for="sem3">3rd Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem4" name="semester" value="4">
+                                        <label for="sem4">4th Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem5" name="semester" value="5">
+                                        <label for="sem5">5th Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem6" name="semester" value="6">
+                                        <label for="sem6">6th Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem7" name="semester" value="7">
+                                        <label for="sem7">7th Semester</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="sem8" name="semester" value="8">
+                                        <label for="sem8">8th Semester</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <h4>Course</h4>
+                                <div class="filter-options">
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="cs101" name="course" value="CS101">
+                                        <label for="cs101">CS101 - Programming Fundamentals</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="cs201" name="course" value="CS201">
+                                        <label for="cs201">CS201 - Data Structures</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="cs301" name="course" value="CS301">
+                                        <label for="cs301">CS301 - Database Systems</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="cs302" name="course" value="CS302">
+                                        <label for="cs302">CS302 - Analysis of Algorithms</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="cs304" name="course" value="CS304">
+                                        <label for="cs304">CS304 - Object Oriented Programming</label>
+                                    </div>
+                                    <div class="filter-checkbox" style="display: none;">
+                                        <input type="checkbox" id="cs307" name="course" value="CS307">
+                                        <label for="cs307">CS307 - Artificial Intelligence</label>
+                                    </div>
+                                    <div class="filter-checkbox" style="display: none;">
+                                        <input type="checkbox" id="cs308" name="course" value="CS308">
+                                        <label for="cs308">CS308 - Web Engineering</label>
+                                    </div>
+                                    <div class="filter-checkbox" style="display: none;">
+                                        <input type="checkbox" id="cs403" name="course" value="CS403">
+                                        <label for="cs403">CS403 - Computer Networks</label>
+                                    </div>
+                                    <button id="show-more-courses" class="show-more-btn">Show More</button>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <h4>File Type</h4>
+                                <div class="filter-options">
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="pdf" name="filetype" value="pdf">
+                                        <label for="pdf">PDF</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="doc" name="filetype" value="doc">
+                                        <label for="doc">DOC/DOCX</label>
+                                    </div>
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" id="ppt" name="filetype" value="ppt">
+                                        <label for="ppt">PPT/PPTX</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <h4>Rating</h4>
+                                <div class="filter-options">
+                                    <div class="filter-radio">
+                                        <input type="radio" id="rating-all" name="rating" value="all" checked>
+                                        <label for="rating-all">All Ratings</label>
+                                    </div>
+                                    <div class="filter-radio">
+                                        <input type="radio" id="rating-4plus" name="rating" value="4plus">
+                                        <label for="rating-4plus">4+ Stars</label>
+                                    </div>
+                                    <div class="filter-radio">
+                                        <input type="radio" id="rating-3plus" name="rating" value="3plus">
+                                        <label for="rating-3plus">3+ Stars</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="apply-filters-btn">Apply Filters</button>
+                        </aside>
+
+                        <div class="notes-section">
+                            <div class="notes-grid">
+                                {% for note in notes %}
+                                {% set ext = note.filename.split('.')[-1]|lower %}
+                                <div class="note-card" data-semester="{{ note.semester }}" data-course="{{ note.course }}" data-filetype="{{ ext }}" data-downloads="{{ note.download_count or 0 }}" data-upvotes="{{ upvote_counts.get(note.id, 0) }}">
+                                    <div class="note-header">
+                                        <div class="note-type pdf">
+                                            <i class="fas fa-file-{{ 'pdf' if ext == 'pdf' else ('word' if ext in ['doc','docx'] else 'powerpoint') }}"></i>
+                                        </div>
+                                    </div>
+                                    <div class="note-body">
+                                        <h3><a href="{{ url_for('note_details', note_id=note.id) }}">{{ note.title }}</a></h3>
+                                        <p class="note-meta">{{ note.course }} | Semester {{ note.semester }}</p>
+                                        <p class="note-meta">By {{ note.uploader.username if note.uploader else 'Unknown' }} · {{ upvote_counts.get(note.id, 0) }} upvotes</p>
+                                    </div>
+                                    <div class="note-footer">
+                                        <div class="note-downloads">
+                                            <i class="fas fa-download"></i>
+                                            <span>{{ note.download_count or 0 }} downloads</span>
+                                        </div>
+                                        <a href="{{ url_for('note_details', note_id=note.id) }}" class="btn btn-sm">Open</a>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <p>No notes found.</p>
+                                {% endfor %}
+                            </div>
+
+                            <div class="pagination" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+                                {% if pagination.has_prev %}
+                                <a class="btn btn-outline btn-sm" href="{{ url_for('browse_notes', page=pagination.page - 1, q=filters.q, semester=filters.semester, course=filters.course, ext=filters.ext, sort=filters.sort) }}">Prev</a>
+                                {% endif %}
+                                <span>Page {{ pagination.page }} of {{ pagination.pages }} ({{ pagination.total }} notes)</span>
+                                {% if pagination.has_next %}
+                                <a class="btn btn-outline btn-sm" href="{{ url_for('browse_notes', page=pagination.page + 1, q=filters.q, semester=filters.semester, course=filters.course, ext=filters.ext, sort=filters.sort) }}">Next</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/browse.js') }}"></script>
+</body>
+</html> 

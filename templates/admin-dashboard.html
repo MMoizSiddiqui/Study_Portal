@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('dashboard') }}" class="logo-link">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="FAST Parhai Logo" class="sidebar-logo" />
+                    <h2>FAST Parhai</h2>
+                </a>
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('manage_resources') }}">
+                            <i class="fas fa-book"></i>
+                            <span>Manage Resources</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_users') }}">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_comments') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>Comments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_analytics') }}">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_logs') }}">
+                            <i class="fas fa-list"></i>
+                            <span>Activity log</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-user"></i>
+                            <span>User View</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="sidebar-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>Admin Dashboard</h1>
+                </div>
+            </header>
+
+            <div class="admin-overview">
+                <div class="stat-card">
+                    <div class="stat-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_users }}</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon notes">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_notes }}</h3>
+                        <p>Total Notes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon users">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ suspended_users }}</h3>
+                        <p>Suspended Users</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="user-management">
+                <div class="section-header">
+                    <h2>System Availability</h2>
+                </div>
+                <p style="margin: 0 0 1rem 0;">
+                    Use this endpoint for uptime checks:
+                    <a href="{{ url_for('admin_health') }}">{{ url_for('admin_health') }}</a>
+                </p>
+            </section>
+
+            <section class="user-management">
+                <div class="section-header">
+                    <h2>All Users</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Semester</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>
+                                    <div class="user-info-cell">
+                                        <img src="https://via.placeholder.com/40" alt="User Avatar">
+                                        <span>{{ user.username }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.semester or 'N/A' }}</td>
+                                <td><span class="status-badge active">Active</span></td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="4">No users found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="user-management">
+                <div class="section-header">
+                    <h2>Recent Security Activity</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Actor ID</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_events %}
+                            <tr>
+                                <td>{{ log.action }}</td>
+                                <td>{{ log.actor_id or 'N/A' }}</td>
+                                <td>{{ log.ip_address or 'N/A' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3">No activity yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal" id="user-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>User Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-profile-header">
+                    <div class="user-avatar">
+                        <img src="https://via.placeholder.com/100" alt="User Avatar" id="modal-user-avatar">
+                    </div>
+                    <div class="user-info">
+                        <h3 id="modal-user-name">User Name</h3>
+                        <p id="modal-user-email">user@example.com</p>
+                        <p id="modal-user-semester">Semester</p>
+                        <p id="modal-user-joined">Joined: Date</p>
+                    </div>
+                    <div class="user-status">
+                        <span class="status-badge active" id="modal-user-status">Active</span>
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="modal-user-uploads">0</span>
+                        <span class="stat-label">Uploads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="modal-user-downloads">0</span>
+                        <span class="stat-label">Downloads</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="modal-user-rating">0</span>
+                        <span class="stat-label">Avg. Rating</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="modal-user-reports">0</span>
+                        <span class="stat-label">Reports</span>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="btn btn-primary" id="modal-edit-user">Edit User</button>
+                    <button class="btn btn-warning" id="modal-ban-user">Ban User</button>
+                    <button class="btn btn-danger" id="modal-delete-user">Delete User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

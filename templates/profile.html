@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>FAST Parhai</h2></div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar">
+                </div>
+                <div class="user-info">
+                    <h3>{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('upload_notes') }}"><i class="fas fa-upload"></i><span>Upload Notes</span></a></li>
+                    <li><a href="{{ url_for('browse_notes') }}"><i class="fas fa-book"></i><span>Browse Notes</span></a></li>
+                    <li><a href="{{ url_for('forum') }}"><i class="fas fa-comments"></i><span>Forum</span></a></li>
+                    <li class="active"><a href="{{ url_for('profile') }}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="sidebar-divider"></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left"><h1>My Profile</h1></div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="overview-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+                    <div class="stat-card">
+                        <h3>{{ uploads_count }}</h3>
+                        <p>Total Uploads</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>{{ current_user.email }}</h3>
+                        <p>Email</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>{{ current_user.semester or 'N/A' }}</h3>
+                        <p>Semester</p>
+                    </div>
+                </div>
+
+                <section style="margin-top:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+                        <h2>My Uploaded Notes</h2>
+                        <a class="btn btn-primary" href="{{ url_for('upload_notes') }}"><i class="fas fa-plus"></i> Upload New</a>
+                    </div>
+                    <div class="notes-grid" style="margin-top:1rem;">
+                        {% for note in user_notes %}
+                        <div class="note-card">
+                            <div class="note-body">
+                                <h3><a href="{{ url_for('note_details', note_id=note.id) }}">{{ note.title }}</a></h3>
+                                <p class="note-meta">{{ note.course }} · Semester {{ note.semester }}</p>
+                                <p class="note-meta">{{ note.download_count or 0 }} downloads</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>No notes uploaded yet.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

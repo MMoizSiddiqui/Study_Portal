@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header"><h2>FAST Parhai</h2></div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+                    <li><a href="{{ url_for('browse_notes') }}"><i class="fas fa-book"></i><span>Browse</span></a></li>
+                    <li class="active"><a href="{{ url_for('leaderboard') }}"><i class="fas fa-trophy"></i><span>Leaderboard</span></a></li>
+                    <li><a href="{{ url_for('settings') }}"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="content-header"><h1>Most active contributors</h1></header>
+            <p style="padding:0 1rem;color:#555;">Score = your note uploads + comments on notes + forum answers.</p>
+            <div class="admin-table-container" style="margin:1rem;">
+                <table class="admin-table">
+                    <thead><tr><th>#</th><th>User</th><th>Activity score</th></tr></thead>
+                    <tbody>
+                        {% for u, score in ranked %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ u.username }}</td>
+                            <td><strong>{{ score }}</strong></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3">No data yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

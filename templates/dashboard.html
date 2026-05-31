@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>FAST Parhai</h2>
+                <button id="sidebarToggle" class="sidebar-toggle" title="Toggle Sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="{% if current_user.profile_pic %}{{ url_for('uploaded_file', filename=current_user.profile_pic) }}{% else %}https://via.placeholder.com/80{% endif %}" alt="User Avatar" id="sidebar-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">{{ current_user.username }}</h3>
+                    <p>{{ current_user.semester or '' }}</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('upload_notes') }}">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('browse_notes') }}">
+                            <i class="fas fa-book"></i>
+                            <span>Browse Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('forum') }}">
+                            <i class="fas fa-comments"></i>
+                            <span>Forum</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Admin Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-divider"></li>
+                    <li>
+                        <a href="{{ url_for('logout') }}" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="headerToggle" class="header-toggle" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Welcome back, <span id="welcomeUserName">{{ current_user.username }}</span>!</h2>
+                        <p>Here's what's happening with your academic resources</p>
+                    </div>
+                    <div class="welcome-actions">
+                        <a href="{{ url_for('upload_notes') }}" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload New Note
+                        </a>
+                        <a href="{{ url_for('browse_notes') }}" class="btn btn-outline">
+                            <i class="fas fa-search"></i> Browse Notes
+                        </a>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ uploads_count }}</h3>
+                            <p>Your Uploads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ downloads_count }}</h3>
+                            <p>Downloads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ avg_rating }}</h3>
+                            <p>Upvotes on your notes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <section class="trending-notes">
+                        <div class="section-header">
+                            <h2>Trending Notes</h2>
+                            <a href="{{ url_for('browse_notes') }}" class="view-all">View All</a>
+                        </div>
+                        <div class="notes-grid">
+                            {% for note, uv in trending_notes %}
+                            {% if note %}
+                            <div class="note-card">
+                                <div class="note-header">
+                                    <div class="note-type pdf">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="note-rating">
+                                        <i class="fas fa-thumbs-up"></i>
+                                        <span>{{ uv }}</span>
+                                    </div>
+                                </div>
+                                <div class="note-body">
+                                    <h3><a href="{{ url_for('note_details', note_id=note.id) }}">{{ note.title }}</a></h3>
+                                    <p class="note-meta">{{ note.course }} · Sem {{ note.semester }}</p>
+                                    <p class="note-author">By: {{ note.uploader.username if note.uploader else '—' }}</p>
+                                </div>
+                                <div class="note-footer">
+                                    <span class="note-downloads">
+                                        <i class="fas fa-download"></i> {{ note.download_count or 0 }}
+                                    </span>
+                                    <a href="{{ url_for('note_details', note_id=note.id) }}" class="btn btn-sm">View</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            <p>Upload notes to see trending content here.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    <section class="recent-activity">
+                        <div class="section-header">
+                            <h2>Recent Activity</h2>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon download">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <p><strong>You downloaded</strong> Operating Systems Final Notes</p>
+                                    <span class="activity-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <!-- More activity items here... -->
+                        </div>
+                    </section>
+                </div>
+
+                <div class="announcements-section">
+                    <div class="section-header">
+                        <h2>Announcements</h2>
+                    </div>
+                    <div class="announcement-card">
+                        <div class="announcement-header">
+                            <h3>End of Semester Notes Drive</h3>
+                            <span class="announcement-date">May 15, 2024</span>
+                        </div>
+                        <div class="announcement-body">
+                            <p>As the semester comes to an end, we encourage all students to upload their notes and study materials to help juniors in the upcoming semesters. Top contributors will receive special badges and recognition!</p>
+                        </div>
+                        <div class="announcement-footer">
+                            <span class="announcement-author">From: FAST Parhai Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html> 

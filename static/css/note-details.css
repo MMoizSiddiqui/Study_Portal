@@ -1,0 +1,553 @@
+/* Note Details Page Styles */
+.note-details-container {
+    padding: 1.5rem;
+  }
+  
+  /* Note Details Header */
+  .note-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .back-button a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    transition: var(--transition);
+  }
+  
+  .back-button a:hover {
+    color: var(--primary-color);
+  }
+  
+  .note-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* Note Details Content */
+  .note-details-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .note-details-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .note-details-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  
+  .note-details-info {
+    margin-bottom: 2rem;
+  }
+  
+  .file-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .file-type.pdf {
+    background-color: #ffebee;
+    color: #f44336;
+  }
+  
+  .file-type.docx {
+    background-color: #e3f2fd;
+    color: #2196f3;
+  }
+  
+  .file-type.ppt {
+    background-color: #fff8e1;
+    color: #ff9800;
+  }
+  
+  .note-details-info h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+  
+  .note-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  
+  .course-info {
+    font-size: 0.875rem;
+    color: var(--text-light);
+  }
+  
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .stars {
+    display: flex;
+    gap: 0.125rem;
+    color: var(--accent-color);
+  }
+  
+  .rating-value {
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+  
+  .rating-count {
+    font-size: 0.75rem;
+    color: var(--text-light);
+  }
+  
+  .uploader-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .uploader-info img {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-full);
+    object-fit: cover;
+  }
+  
+  .uploader-info p {
+    margin-bottom: 0.25rem;
+    color: var(--text-light);
+  }
+  
+  .user-link {
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+  
+  .upload-date {
+    font-size: 0.875rem;
+    color: var(--text-lighter);
+  }
+  
+  .note-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+  }
+  
+  .stat i {
+    color: var(--primary-color);
+  }
+  
+  /* Note Description */
+  .note-details-description {
+    margin-bottom: 2rem;
+  }
+  
+  .note-details-description h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+  
+  .note-details-description p {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .note-details-description ul {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+  }
+  
+  .note-details-description ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+  
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--gray-100);
+    color: var(--text-light);
+    border-radius: var(--border-radius-full);
+    font-size: 0.75rem;
+    transition: var(--transition);
+  }
+  
+  .tag:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+  }
+  
+  /* Note Preview */
+  .note-details-preview {
+    margin-bottom: 2rem;
+  }
+  
+  .note-details-preview h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+  
+  .preview-container {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  
+  .preview-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .preview-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--white);
+    text-align: center;
+  }
+  
+  /* Note Download */
+  .note-details-download {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .file-info {
+    font-size: 0.875rem;
+    color: var(--text-light);
+  }
+  
+  /* Rating Section */
+  .note-rating-section {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .note-rating-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+  
+  .note-rating-section p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+  }
+  
+  .rating-stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--gray-300);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .rating-stars i {
+    transition: var(--transition);
+  }
+  
+  .rating-stars i:hover,
+  .rating-stars i.active {
+    color: var(--accent-color);
+  }
+  
+  .rating-text {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+  }
+  
+  .rating-comment {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--white);
+    min-height: 100px;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+  }
+  
+  .rating-comment:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.1);
+  }
+  
+  /* Comments Section */
+  .note-comments-section {
+    padding: 2rem;
+  }
+  
+  .note-comments-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .comment-form {
+    margin-bottom: 2rem;
+  }
+  
+  .comment-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--white);
+    min-height: 100px;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+  }
+  
+  .comment-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.1);
+  }
+  
+  .post-comment {
+    align-self: flex-end;
+  }
+  
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .comment {
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+  }
+  
+  .comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .comment-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .comment-user img {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-full);
+    object-fit: cover;
+  }
+  
+  .comment-user h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+  }
+  
+  .comment-date {
+    font-size: 0.75rem;
+    color: var(--text-lighter);
+  }
+  
+  .comment-content {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .comment-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .comment-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .comment-action:hover {
+    color: var(--primary-color);
+  }
+  
+  .comment-replies {
+    margin-top: 1.5rem;
+    padding-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .comment.reply {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+  }
+  
+  /* Similar Notes */
+  .similar-notes {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+  
+  .similar-notes h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .similar-note-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    transition: var(--transition);
+  }
+  
+  .similar-note-item:hover {
+    background-color: var(--primary-light);
+  }
+  
+  .similar-note-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    font-size: 1.25rem;
+  }
+  
+  .similar-note-icon.pdf {
+    color: #f44336;
+  }
+  
+  .similar-note-icon.doc {
+    color: #2196f3;
+  }
+  
+  .similar-note-icon.ppt {
+    color: #ff9800;
+  }
+  
+  .similar-note-info {
+    flex: 1;
+  }
+  
+  .similar-note-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+  }
+  
+  .similar-note-info p {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .note-details-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .note-details-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  
+    .note-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  
+    .note-stats {
+      flex-wrap: wrap;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .note-details-card {
+      padding: 1.5rem;
+    }
+  
+    .uploader-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  
+    .comment-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+  

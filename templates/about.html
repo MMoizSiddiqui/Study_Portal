@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - FAST Parhai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="nav-menu">
+            <a href="{{ url_for('index') }}" class="logo">FAST Parhai</a>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('about') }}">About Us</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+                <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="about-hero" style="background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%); min-height: 320px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+        <div style="position: absolute; left: 2rem; top: 2rem; font-size: 3rem; opacity: 0.12;">💡</div>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+            <div class="hero-content" style="background: rgba(255,255,255,0.85); border-radius: 2rem; box-shadow: 0 8px 32px 0 rgba(33,147,176,0.10); padding: 2.5rem 2rem; max-width: 900px; width: 100%; text-align: center; position: relative; animation: fadeInUp 1.2s;">
+                <h1 style="font-size: 2.7rem; font-weight: 700; color: #2193b0; display: flex; align-items: center; justify-content: center; gap: 0.7rem; animation: bounceIn 1.2s;">
+                    <span style="font-size: 2.2rem;">✨</span> About FAST Parhai
+                </h1>
+                <p style="font-size: 1.25rem; color: #333; margin-top: 1rem;">Empowering students through collaborative learning and knowledge sharing</p>
+            </div>
+        </div>
+        <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); }
+            60% { transform: scale(1.05); }
+            80% { transform: scale(0.97); }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 700px) {
+            .hero-content { padding: 1.2rem 0.5rem !important; }
+            .hero-content h1 { font-size: 2rem !important; }
+        }
+        </style>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="our-story">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Story</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="story-content">
+                <div class="story-image">
+                    <img src="static/images/HP.jpg" alt="FAST Parhai Team">
+                    
+                </div>
+                <div class="story-text">
+                    <p>FAST Parhai was born out of a simple idea: to create a platform where students could easily share and access study materials, collaborate on academic challenges, and support each other throughout their educational journey.</p>
+                    <p>Founded in 2023 by a group of passionate FAST-NUCES students, our platform has grown from a small project into a comprehensive educational ecosystem serving thousands of students across multiple campuses.</p>
+                    <p>What started as a solution to our own academic struggles has evolved into a mission to transform how students learn and collaborate in the digital age.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="mission-vision">
+        <div class="container">
+            <div class="mission-vision-grid">
+                <div class="mission-box">
+                    <div class="icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To create an inclusive educational platform that empowers students to excel academically through resource sharing, peer support, and collaborative learning.</p>
+                </div>
+                <div class="vision-box">
+                    <div class="icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To revolutionize the way students learn by fostering a community where knowledge is freely shared, collaboration is encouraged, and every student has the resources they need to succeed.</p>
+                </div>
+                <div class="values-box">
+                    <div class="icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Our Values</h3>
+                    <ul>
+                        <li>Collaboration over competition</li>
+                        <li>Quality education for all</li>
+                        <li>Student-centered innovation</li>
+                        <li>Academic integrity</li>
+                        <li>Continuous improvement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section" style="background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%); border-radius: 2rem; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); margin: 3rem auto 0 auto; max-width: 1100px; color: #fff; position: relative; overflow: hidden;">
+        <div style="position: absolute; left: 1.5rem; top: 1.5rem; font-size: 2.5rem; opacity: 0.15;">👥</div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="section-header">
+                <h2>Meet Our Team</h2>
+                <div class="divider"></div>
+                <p>The passionate individuals behind FAST Parhai</p>
+            </div>
+            <div class="team-grid" style="display: flex; justify-content: center; gap: 2.5rem;">
+                <div class="team-member" style="background: rgba(255,255,255,0.8); border-radius: 1.5rem; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08); padding: 2rem 1.2rem; text-align: center; transition: transform 0.2s, box-shadow 0.2s; backdrop-filter: blur(8px); cursor: pointer; width: 260px;">
+                    <div class="member-image">
+                        <img src="static/images/male.jpg" alt="Moiz Siddiqui" style="border-radius: 50%; width: 100px; height: 100px; box-shadow: 0 2px 12px 0 rgba(33,147,176,0.10);">
+                    </div>
+                    <h3 style="color: #2193b0;">Moiz Siddiqui</h3>
+                    <p class="position" style="color: #333;">Founder & Developer</p>
+                    <p class="bio" style="color: #333;">Driven by a passion for tech and education, Moiz is the creative mind behind FAST Parhai.</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/muhammad-moiz-siddiqui-99357229a/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/MMoizSiddiqui" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="team-member" style="background: rgba(255,255,255,0.8); border-radius: 1.5rem; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08); padding: 2rem 1.2rem; text-align: center; transition: transform 0.2s, box-shadow 0.2s; backdrop-filter: blur(8px); cursor: pointer; width: 260px;">
+                    <div class="member-image">
+                        <img src="static/images/female.jpg" alt="-" style="border-radius: 50%; width: 100px; height: 100px; box-shadow: 0 2px 12px 0 rgba(33,147,176,0.10);">
+                    </div>
+                    <h3 style="color: #2193b0;">-</h3>
+                    <p class="position" style="color: #333;">Co-Founder & Designer</p>
+                    <p class="bio" style="color: #333;">- brings creative flair and a love for user experience to the FAST Parhai team.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="achievements-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Achievements</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-box">
+                    <div class="achievement-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="achievement-number">5,000+</div>
+                    <div class="achievement-text">Active Students</div>
+                </div>
+                <div class="achievement-box">
+                    <div class="achievement-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="achievement-number">10,000+</div>
+                    <div class="achievement-text">Study Materials</div>
+                </div>
+                <div class="achievement-box">
+                    <div class="achievement-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="achievement-number">5</div>
+                    <div class="achievement-text">FAST Campuses</div>
+                </div>
+                <div class="achievement-box">
+                    <div class="achievement-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="achievement-number">2</div>
+                    <div class="achievement-text">Innovation Awards</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Students Say</h2>
+                <div class="divider"></div>
+            </div>
+
+            <!-- Submit Testimonial Form -->
+            <div style="background: linear-gradient(120deg, #2193b0 0%, #6dd5ed 100%); border-radius: 1.5rem; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 24px 0 rgba(33,147,176,0.15);">
+                <h3 style="color: #fff; margin-top: 0;">Share Your Experience</h3>
+                <p style="color: rgba(255,255,255,0.9);">Help other students by sharing how FAST Parhai has helped you. Your testimonial will be reviewed before appearing here.</p>
+                <form method="POST" action="{{ url_for('submit_testimonial') }}" style="margin-top: 1.5rem;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <input type="text" name="author_name" placeholder="Your Name" maxlength="150" required style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 1rem;">
+                        </div>
+                        <div>
+                            <input type="text" name="author_semester" placeholder="e.g., Computer Science, 6th Semester" maxlength="50" required style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 1rem;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <textarea name="content" placeholder="Share your experience with FAST Parhai (min 20 characters)..." maxlength="1000" rows="4" required style="width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 1rem; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="background: #fff; color: #2193b0; font-weight: 600; padding: 0.75rem 2rem; border: none; border-radius: 0.5rem; cursor: pointer;">Submit Testimonial</button>
+                </form>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div style="margin:1rem 0;">
+                {% for cat, msg in messages %}
+                  <div style="background: {% if cat == 'error' %}#ffebee{% else %}#e8f5e9{% endif %}; border-left: 4px solid {% if cat == 'error' %}#d32f2f{% else %}#388e3c{% endif %}; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; color: {% if cat == 'error' %}#c62828{% else %}#2e7d32{% endif %};">{{ msg }}</div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <!-- Display Testimonials -->
+            <div class="testimonials-slider">
+                {% if testimonials %}
+                    {% for testimonial in testimonials %}
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p>"{{ testimonial.content }}"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4>{{ testimonial.author_name }}</h4>
+                                <p>{{ testimonial.author_semester }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <p><i class="fas fa-quote-left" style="font-size: 2rem; opacity: 0.3;"></i></p>
+                        <p>Be the first to share your testimonial! Submit your experience above.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if testimonials|length > 1 %}
+            <div class="slider-controls">
+                <button class="prev-btn" onclick="slideTestimonials(-1)"><i class="fas fa-chevron-left"></i></button>
+                <div class="slider-dots" id="slider-dots">
+                    {% for i in range(testimonials|length) %}
+                    <span class="dot {% if i == 0 %}active{% endif %}" onclick="currentSlide({{ i }})"></span>
+                    {% endfor %}
+                </div>
+                <button class="next-btn" onclick="slideTestimonials(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Join Our Community?</h2>
+                <p>Start your journey with FAST Parhai today and experience the power of collaborative learning.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary">Sign Up Now</a>
+                    <a href="{{ url_for('contact') }}" class="btn btn-outline">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 2rem 2rem 0 0; box-shadow: 0 -4px 24px 0 rgba(33,147,176,0.10); margin-top: -2rem;">
+        <div class="container">
+            <div class="footer-content" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 2rem; padding: 2.5rem 0 1.5rem 0;">
+                <div class="footer-logo">
+                    <h2 style="color: #2193b0; font-weight: 700;">FAST Parhai</h2>
+                    <p style="color: #333;">Academic Resource Sharing Platform</p>
+                </div>
+                <div class="footer-links">
+                    <h3 style="color: #2193b0;">Quick Links</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="/" style="color: #2193b0;">Home</a></li>
+                        <li><a href="/about" style="color: #2193b0;">About</a></li>
+                        <li><a href="/contact" style="color: #2193b0;">Contact</a></li>
+                        <li><a href="/login" style="color: #2193b0;">Login</a></li>
+                        <li><a href="/register" style="color: #2193b0;">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3 style="color: #2193b0;">Contact Us</h3>
+                    <p style="color: #333;"><i class="fas fa-envelope"></i> support@fastparhai.edu</p>
+                    <p style="color: #333;"><i class="fas fa-map-marker-alt"></i> FAST University Campus</p>
+                    <div class="social-icons" style="margin-top: 1rem;">
+                        <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-instagram"></i></a>
+                        <a href="#" style="color: #2193b0; margin-right: 0.7rem; transition: color 0.2s, transform 0.2s;"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom" style="text-align: center; color: #2193b0; padding: 1rem 0 0.5rem 0; font-size: 1rem;">
+                <p>&copy; 2023 FAST Parhai. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/about.js') }}"></script>
+    <script>
+    // Animate social icons on hover
+    document.querySelectorAll('.social-icons a').forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            icon.style.color = '#6dd5ed';
+            icon.style.transform = 'scale(1.2) rotate(-8deg)';
+        });
+        icon.addEventListener('mouseleave', () => {
+            icon.style.color = '#2193b0';
+            icon.style.transform = 'none';
+        });
+    });
+    // Card bounce on hover
+    document.querySelectorAll('.team-member').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'scale(1.05)';
+            card.style.boxShadow = '0 8px 32px 0 rgba(33,147,176,0.18)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'scale(1)';
+            card.style.boxShadow = '0 4px 24px 0 rgba(0,0,0,0.08)';
+        });
+    });
+    </script>
+</body>
+</html>
