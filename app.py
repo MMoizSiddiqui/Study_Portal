@@ -1184,11 +1184,13 @@ def add_security_headers(response):
     return response
 
 
+# Initialize DB at import time so gunicorn picks it up too
+with app.app_context():
+    db.create_all()
+    migrate_legacy_sqlite()
+    db.create_all()
+    bootstrap_admin()
+    print("✓ FAST Parhai initialized successfully!")
+
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        migrate_legacy_sqlite()
-        db.create_all()
-        bootstrap_admin()
-        print("✓ FAST Parhai initialized successfully!")
     app.run(host="127.0.0.1", port=5000, debug=False)
